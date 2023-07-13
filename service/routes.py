@@ -51,8 +51,8 @@ def create_accounts():
     account.create()
     message = account.serialize()
     # Uncomment once get_accounts has been implemented
-    # location_url = url_for("get_accounts", account_id=account.id, _external=True)
-    location_url = "/"  # Remove once get_accounts has been implemented
+    location_url = url_for("get_accounts", account_id=account.id, _external=True)
+    # location_url = "/"  # Remove once get_accounts has been implemented
     return make_response(
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
@@ -62,7 +62,22 @@ def create_accounts():
 ######################################################################
 
 # ... place you code here to LIST accounts ...
-
+@app.route("/accounts", methods=["GET"])
+def list_accounts():
+    """
+    List all Accounts
+    This endpoint will list all Accounts
+    """
+    app.logger.info("Request to list Accounts")
+    # use the Account.all() method to retrieve all accounts
+    accounts = Account.all()
+    # create a list of serialize() accounts
+    account_list = [account.serialize() for account in accounts]
+    # log the number of accounts being returned in the list 
+    app.logger.info("There are [%s] accounts in the list", len(account_list))
+    # return the list with a return code of status.HTTP_200_OK
+    return jsonify(account_list), status.HTTP_200_OK
+     
 
 ######################################################################
 # READ AN ACCOUNT
@@ -71,18 +86,18 @@ def create_accounts():
 # ... place you code here to READ an account ...
 @app.route("/accounts/<int:account_id>", methods=["GET"])
 def get_accounts(account_id):
-        """
-        Reads an Account
-        This endpoint will read an Account based the account_id that is requested
-        """
-        app.logger.info("Request to read an Account with id: %s", account_id)
-        # use the Account.find() method to find the account
-        account = Account.find(account_id)
-        # abort() with a status.HTTP_404_NOT_FOUND if it cannot be found
-        if not account:
-            abort(status.HTTP_404_NOT_FOUND, f"the given Account [{account_id}] does not exist")
-        # return the serialize() version of the account with a return code of status.HTTP_200_OK
-        return account.serialize(), status.HTTP_200_OK    
+    """
+    Reads an Account
+    This endpoint will read an Account based the account_id that is requested
+    """
+    app.logger.info("Request to read an Account with id: %s", account_id)
+    # use the Account.find() method to find the account
+    account = Account.find(account_id)
+    # abort() with a status.HTTP_404_NOT_FOUND if it cannot be found
+    if not account:
+       abort(status.HTTP_404_NOT_FOUND, f"the given Account [{account_id}] does not exist")
+    # return the serialize() version of the account with a return code of status.HTTP_200_OK
+    return account.serialize(), status.HTTP_200_OK    
 
 
 ######################################################################
