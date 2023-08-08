@@ -57,6 +57,7 @@ def create_accounts():
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
 
+
 ######################################################################
 # LIST ALL ACCOUNTS
 ######################################################################
@@ -73,11 +74,11 @@ def list_accounts():
     accounts = Account.all()
     # create a list of serialize() accounts
     account_list = [account.serialize() for account in accounts]
-    # log the number of accounts being returned in the list 
+    # log the number of accounts being returned in the list
     app.logger.info("There are [%s] accounts in the list", len(account_list))
     # return the list with a return code of status.HTTP_200_OK
     return jsonify(account_list), status.HTTP_200_OK
-     
+
 
 ######################################################################
 # READ AN ACCOUNT
@@ -95,9 +96,9 @@ def get_accounts(account_id):
     account = Account.find(account_id)
     # abort() with a status.HTTP_404_NOT_FOUND if it cannot be found
     if not account:
-       abort(status.HTTP_404_NOT_FOUND, f"the given Account [{account_id}] does not exist")
+        abort(status.HTTP_404_NOT_FOUND, f"the given Account [{account_id}] does not exist")
     # return the serialize() version of the account with a return code of status.HTTP_200_OK
-    return account.serialize(), status.HTTP_200_OK    
+    return account.serialize(), status.HTTP_200_OK
 
 
 ######################################################################
@@ -116,7 +117,7 @@ def update_accounts(account_id):
     account = Account.find(account_id)
     # abort() with a status.HTTP_404_NOT_FOUND if it cannot be found
     if not account:
-       abort(status.HTTP_404_NOT_FOUND, f"Account with id [{account_id}] does not exist.")
+        abort(status.HTTP_404_NOT_FOUND, f"Account with id [{account_id}] does not exist.")
     # call the deserialize() method on the account passing in request.get_json()
     account.deserialize(request.get_json())
     # call account.update() to update the account with the new data
