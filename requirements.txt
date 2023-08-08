@@ -30,3 +30,6 @@ httpie==3.2.1
 
 # Security
 flask-talisman
+
+# adding Fask-Cors
+Flask-Cors
